@@ -27,7 +27,7 @@
     </head>
     <body>
         <div id="media-info">
-            <video id="capture-video" autoplay="1"></video>
+            <video id="capture-video" autoplay playsinline></video>
             <div class="card" v-for="device in devices">
                 <p class="card-title">Kind:{{device.kind}}</p>
                 <p class="card-body">Label:{{device.label}}</p>
@@ -43,7 +43,6 @@
                         video: true,
                         audio: false,
                     },
-                    captureVideo: document.getElementById('capture-video')
                 },
                 methods: {
                     getMediaDevices() {
@@ -57,13 +56,11 @@
                         })
                     },
                     async useCaptureDevices() {
+                        var captureVideo = document.getElementById('capture-video')
                         await navigator.mediaDevices.getUserMedia(this.constraints)
                         .then((mediaStream) => {
                             console.log(mediaStream)
-                            this.captureVideo.srcObject = mediaStream
-                            this.captureVideo.onloadedmetadata = function(e) {
-                                this.captureVideo.play();
-                            };
+                            captureVideo.srcObject = mediaStream
                         })
                         .catch((error) => {
                             console.log(error)
