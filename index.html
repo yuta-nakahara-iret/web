@@ -1,13 +1,73 @@
 <html>
+    <head>
+        <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+        <style>
+            .card {
+                width: 300px;
+                height: 200px;
+                background-color: beige;
+                margin: 5px;
+            }
+            .card-title {
+                text-align: center;
+                font-size: medium;
+                margin: 1px;
+                word-wrap: break-word;
+            }
+            .card-body {
+                font-size: small;
+                margin: 1px;
+                word-wrap: break-word;
+            }
+            .card-footer {
+                margin: 1px;
+                word-wrap: break-word;
+            }
+        </style>
+    </head>
     <body>
-        hello.
+        <div id="media-info">
+            <div class="card" v-for="device in devices">
+                <p class="card-title">Kind:{{device.kind}}</p>
+                <p class="card-body">Label:{{device.label}}</p>
+                <p class="card-footer">GroupId:{{device.groupId}}</p>
+            </div>
+        </div>
         <script>
-            navigator.mediaDevices.enumerateDevices()
-            .then((device) => {
-                console.log(device)
-            })
-            .catch((error) => {
-                console.log(error)
+            var app = new Vue({
+                el: '#media-info',
+                data: {
+                    devices: null,
+                    constraints: {
+                        video: true,
+                        audio: false,
+                    }
+                },
+                methods: {
+                    getMediaDevices() {
+                        navigator.mediaDevices.enumerateDevices()
+                        .then((devices) => {
+                            console.log(devices)
+                            this.devices = devices
+                        })
+                        .catch((error) => {
+                            console.log(error)
+                        })
+                    },
+                    useCaptureDevices() {
+                        navigator.mediaDevices.getUserMedia(this.constraints)
+                        .then((mediaStream) => {
+                            console.log(mediaStream)
+                            this.getMediaDevices()
+                        })
+                        .catch((error) => {
+                            console.log(error)
+                        })
+                    }
+                },
+                mounted: function() {
+                    this.useCaptureDevices()
+                }
             })
         </script>
     </body>
