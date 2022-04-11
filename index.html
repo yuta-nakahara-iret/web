@@ -61,6 +61,9 @@
                         .then((mediaStream) => {
                             console.log(mediaStream)
                             this.captureVideo.srcObject = mediaStream
+                            captureVideo.onloadedmetadata = function(e) {
+                                video.play();
+                            };
                         })
                         .catch((error) => {
                             console.log(error)
