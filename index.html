@@ -1,5 +1,14 @@
 <html>
     <body>
         hello.
+        <script>
+            navigator.mediaDevices.enumerateDevices()
+            .then((device) => {
+                console.log(device)
+            })
+            .catch((error) => {
+                console.log(error)
+            })
+        </script>
     </body>
 </html>
