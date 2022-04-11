@@ -27,6 +27,7 @@
     </head>
     <body>
         <div id="media-info">
+            <video id="capture-video" autoplay="1"></video>
             <div class="card" v-for="device in devices">
                 <p class="card-title">Kind:{{device.kind}}</p>
                 <p class="card-body">Label:{{device.label}}</p>
@@ -41,7 +42,8 @@
                     constraints: {
                         video: true,
                         audio: false,
-                    }
+                    },
+                    captureVideo: document.getElementById('capture-video')
                 },
                 methods: {
                     getMediaDevices() {
@@ -54,15 +56,16 @@
                             console.log(error)
                         })
                     },
-                    useCaptureDevices() {
-                        navigator.mediaDevices.getUserMedia(this.constraints)
+                    async useCaptureDevices() {
+                        await navigator.mediaDevices.getUserMedia(this.constraints)
                         .then((mediaStream) => {
                             console.log(mediaStream)
-                            this.getMediaDevices()
+                            this.captureVideo.srcObject = mediaStream
                         })
                         .catch((error) => {
                             console.log(error)
                         })
+                        this.getMediaDevices()
                     }
                 },
                 mounted: function() {
